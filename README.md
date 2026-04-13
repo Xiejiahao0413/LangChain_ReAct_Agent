@@ -75,10 +75,6 @@
 
 ## 安装步骤
 
-- 克隆项目
-
-> git clone https://github.com/lhh737/Langchain-ReAct-Agent.git
-
 - 安装依赖
 
 > pip install -r requirements.txt
