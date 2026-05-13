@@ -283,6 +283,44 @@ streamlit run app.py
 
 ---
 
+## FastAPI 与 SSE 接口
+
+项目新增 `api/` 目录，提供可服务化部署的 FastAPI 入口，适合前后端解耦、接口联调和简历项目演示。
+
+启动 API 服务：
+
+```bash
+uvicorn api.app:app --reload --host 0.0.0.0 --port 8000
+```
+
+健康检查：
+
+```bash
+curl http://127.0.0.1:8000/health
+```
+
+普通对话接口：
+
+```bash
+curl -X POST http://127.0.0.1:8000/api/chat ^
+  -H "Content-Type: application/json" ^
+  -d "{\"query\":\"扫地机器人漏扫怎么办？\"}"
+```
+
+SSE 流式接口：
+
+```bash
+curl -N "http://127.0.0.1:8000/api/chat/stream?query=扫地机器人漏扫怎么办"
+```
+
+接口文件：
+
+- `api/app.py`：FastAPI 应用入口，包含 `/health`、`/api/chat`、`/api/chat/stream`
+- `api/schemas.py`：请求与响应模型
+- `tests/test_api.py`：使用 FastAPI `TestClient` 和假 Agent 覆盖 REST/SSE 行为
+
+---
+
 ## Agent 评测模块
 
 项目新增 `evaluation/` 目录，用于评估 ReAct Agent 在典型任务中的工具调用与回答质量。

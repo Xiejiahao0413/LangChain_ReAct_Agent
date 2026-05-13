@@ -11,6 +11,7 @@ sys.path.insert(0, str(PROJECT_ROOT))
 
 class SmokeTest(unittest.TestCase):
     def test_core_modules_import(self):
+        import api.app  # noqa: F401
         import agent.react_agent  # noqa: F401
         import agent.tools.middleware  # noqa: F401
         import rag.rag_service  # noqa: F401
