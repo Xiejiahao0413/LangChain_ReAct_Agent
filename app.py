@@ -37,5 +37,7 @@ if prompt:
                     yield char
 
         st.chat_message("assistant").write_stream(capture(res_stream, response_messages))
-        st.session_state["message"].append({"role": "assistant", "content": response_messages[-1]})
+        assistant_content = "".join(response_messages).strip()
+        if assistant_content:
+            st.session_state["message"].append({"role": "assistant", "content": assistant_content})
         st.rerun()

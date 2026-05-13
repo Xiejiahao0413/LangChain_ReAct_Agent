@@ -1,11 +1,11 @@
-collection_name : agent
-persist_directory : chroma_db
-k :  3
-data_path : data
-md5_hex_store : md5.txt
-allow_knowledge_file_type : ["txt","pdf"]
+collection_name : agent          #集合名称
+persist_directory : chroma_db    #持久化存储目录
+k :  3                           #检索返回的文档数量
+data_path : data                 #知识库数据存放目录
+md5_hex_store : md5.txt          #存储文件MD5的文件名，用于去重
+allow_knowledge_file_type : ["txt","pdf"]    #允许加载的文件类型
 
 chunk_size : 200
 chunk_overlap : 20
-separators : ["\n\n","。",".","?","？","!"," ",""]
+separators : ["\n\n","。",".","?","？","!"," ",""]     #分块分隔符优先级
 
