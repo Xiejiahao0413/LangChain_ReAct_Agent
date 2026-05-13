@@ -1,25 +1,26 @@
 from langchain_chroma import Chroma
 from langchain_core.documents import Document
 from utils.config_handler import chroma_conf
-
 from model.factory import embed_model
-
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from utils.path_tool import get_abs_path
 from utils.file_handler import pdf_loader, txt_loader, listdir_with_allowed_type, get_file_md5_hex
 from utils.logger_handler import logger
-
 import os
 
+"""
+向量库存储服务：负责文档加载，分块，向量化存储和检索
+"""
 
 class VectorStoreService:
     def __init__(self):
-        self.vector_store = Chroma(
+        #连接chroma向量库
+        self.vector_store = Chroma(                              
             collection_name=chroma_conf["collection_name"],
             embedding_function=embed_model,
             persist_directory=chroma_conf["persist_directory"],
         )
-
+        #文本分割器
         self.spliter = RecursiveCharacterTextSplitter(
             chunk_size=chroma_conf["chunk_size"],
             chunk_overlap=chroma_conf["chunk_overlap"],
@@ -91,7 +92,12 @@ class VectorStoreService:
                     continue
 
                 # 将内容存入向量库
-                self.vector_store.add_documents(split_document)
+                #self.vector_store.add_documents(split_document)
+                # 将内容分批存入向量库（每次最多10条）
+                batch_size = 10
+                for i in range(0, len(split_document), batch_size):
+                    batch = split_document[i:i+batch_size]
+                    self.vector_store.add_documents(batch)
 
                 # 记录这个已经处理好的文件的md5，避免下次重复加载
                 save_md5_hex(md5_hex)

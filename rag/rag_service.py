@@ -2,9 +2,12 @@
 """
 总结服务类：用户提问，搜索参考资料，将提问和参考资料提交给模型，让模型总结回复
 """
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
 from langchain_core.documents import Document
 from langchain_core.output_parsers import StrOutputParser
-
 from rag.vector_store import VectorStoreService
 from utils.prompt_loader import load_rag_prompts
 from langchain_core.prompts import PromptTemplate
@@ -28,11 +31,15 @@ class RagSummarizeService(object):
         self.chain = self._init_chain()
 
     def _init_chain(self):
-        chain = self.prompt_template | print_prompt | self.model | StrOutputParser()
+        chain = self.prompt_template | print_prompt | self.model | StrOutputParser()     #StrOutputParser()：提取模型输出的文本内容
         return chain
 
-    def retriever_docs(self, query: str) -> list[Document]:
+
+    #检索文档 根据用户问题从向量库中检索相关文档，返回Documen对象列表
+    def retriever_docs(self, query: str) -> list[Document]: 
         return self.retriever.invoke(query)
+
+
 
     def rag_summarize(self, query: str) -> str:
 
